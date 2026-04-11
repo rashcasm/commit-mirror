@@ -1,0 +1,2 @@
+[console_scripts]
+commit-mirror = commit_mirror.mirror:main

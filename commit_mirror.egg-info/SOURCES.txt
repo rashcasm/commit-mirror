@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+commit_mirror/__init__.py
+commit_mirror/mirror.py
+commit_mirror.egg-info/PKG-INFO
+commit_mirror.egg-info/SOURCES.txt
+commit_mirror.egg-info/dependency_links.txt
+commit_mirror.egg-info/entry_points.txt
+commit_mirror.egg-info/requires.txt
+commit_mirror.egg-info/top_level.txt
