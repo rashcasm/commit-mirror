@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "commit-mirror"
+version = "0.1.0"
+description = "Mirror your private repo commit messages to a public GitHub repo so your green squares survive."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dependencies = [
+    "gitpython>=3.1",
+]
+authors = [
+    { name = "Rashmin Chaudhari", email = "rashmin9c@gmail.com" }
+]
+keywords = ["github", "git", "contributions", "green squares", "commit"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/rashcasm/commit-mirror"
+Issues = "https://github.com/rashcasm/commit-mirror/issues"
+
+[project.scripts]
+commit-mirror = "commit_mirror.mirror:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["commit_mirror*"]

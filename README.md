@@ -1,0 +1,113 @@
+# commit-mirror
+
+> Mirror your private repo commit messages to a public GitHub repo, so your green contribution squares survive when you leave an org.
+
+When you're removed from a private organization, GitHub wipes those contributions from your graph. Your code stays in their repo, but you lose all the green squares. This tool runs locally, reads your `git log`, and copies **only commit messages** (no code, no diffs) to a public repo you own, keeping your graph alive.
+
+---
+
+## Install
+
+```bash
+pip install commit-mirror
+```
+
+---
+
+## Setup (once)
+
+**Step 1** — Create a public GitHub repo called `activity-log` (or any name) and clone it:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/activity-log ~/activity-log
+```
+
+**Step 2** — Run the setup wizard:
+
+```bash
+commit-mirror --setup
+```
+
+It will ask for:
+- Your git author email
+- The path to your cloned `activity-log` repo
+- The folder(s) that contain your private repos (cloned locally)
+
+---
+
+## Usage
+
+```bash
+commit-mirror                   # run normally
+commit-mirror --dry-run         # preview without pushing
+commit-mirror --dry-run --days 30   # look back 30 days
+commit-mirror --config          # show your current config
+```
+
+---
+
+## Automate it (run daily)
+
+**macOS / Linux — cron:**
+```bash
+crontab -e
+# Add:
+0 23 * * * commit-mirror >> ~/mirror.log 2>&1
+```
+
+**Windows — Task Scheduler:**
+```
+Action: commit-mirror
+Trigger: Daily at 11 PM
+```
+
+---
+
+## What gets mirrored
+
+| ✅ Mirrored | ❌ Never mirrored |
+|---|---|
+| First line of commit message | Code / diffs |
+| Commit timestamp (UTC) | File names |
+| Repo name | Branch names |
+| | Other authors' commits |
+
+The output in your public repo looks like:
+
+```markdown
+## 2025-06-15
+- `10:32 UTC` **[frontend-app]** fix null pointer in user auth flow
+- `14:17 UTC` **[backend-api]** add pagination to /orders endpoint
+```
+
+---
+
+## Config file
+
+Stored at `~/.commit-mirror/config.json`. Edit manually or re-run `--setup`.
+
+---
+
+## License
+
+MIT License
+
+Copyright (c) 2026 Rashmin Chaudhari
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
