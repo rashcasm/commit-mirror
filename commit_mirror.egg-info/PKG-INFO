@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: commit-mirror
-Version: 0.1.0
+Version: 0.1.1
 Summary: Mirror your private repo commit messages to a public GitHub repo so your green squares survive.
 Author-email: Rashmin Chaudhari <rashmin9c@gmail.com>
 License: MIT License

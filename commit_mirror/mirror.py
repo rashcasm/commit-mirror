@@ -182,7 +182,36 @@ def push_mirror(mirror_repo_path, log_file_name, count, dry_run=False):
         return
 
     repo.index.commit(commit_msg)
-    repo.remote("origin").push()
+
+    origin = repo.remote("origin")
+
+    # Reconcile with the remote first. The mirror log can be edited directly
+    # on GitHub (web UI), which leaves local and remote diverged and makes a
+    # plain push a non-fast-forward rejection.
+    branch = repo.active_branch.name
+    try:
+        repo.git.pull("--rebase", "origin", branch)
+    except git.GitCommandError as e:
+        print(f"ERROR: could not rebase onto origin/{branch} before pushing.")
+        print(e.stderr.strip() if e.stderr else str(e))
+        print("Resolve the conflict in the mirror repo, then re-run.")
+        sys.exit(1)
+
+    # GitPython's push() does NOT raise on a rejected push; it reports the
+    # failure via PushInfo flags. Check them so we never claim success on a
+    # push that the remote actually rejected.
+    push_results = origin.push()
+    failed = [
+        info for info in push_results
+        if info.flags & (git.PushInfo.ERROR | git.PushInfo.REJECTED
+                         | git.PushInfo.REMOTE_REJECTED)
+    ]
+    if failed:
+        print(f"ERROR: push to origin/{branch} was rejected.")
+        for info in failed:
+            print(f"  {info.summary.strip()}")
+        sys.exit(1)
+
     print(f"Pushed: {commit_msg}")
 
 
